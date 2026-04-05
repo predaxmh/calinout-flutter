@@ -1,6 +1,18 @@
-# calinout
+# Calinout
 
 A new Flutter project.
+
+<p float="left">
+  <img src="screenshots/Screenshot_2026-04-05-14-55-27-587_com.example.calinout.jpg" width="200"/>
+  <img src="Screenshot_2026-04-05-14-55-32-562_com.example.calinout.jpg" width="200"/>
+  <img src="Screenshot_2026-04-05-14-55-32-344_com.example.calinout.jpg" width="200"/>
+  <img src="Screenshot_2026-04-05-14-55-32-236_com.example.calinout.jpg" width="200"/>
+  <img src="Screenshot_2026-04-05-14-55-32-705_com.example.calinout.jpg" width="200"/>
+  <img src="Screenshot_2026-04-05-14-55-32-307_com.example.calinout.jpg" width="200"/>
+  <img src="Screenshot_2026-04-05-14-55-32-650_com.example.calinout.jpg" width="200"/>
+  <img src="Screenshot_2026-04-05-14-55-32-017_com.example.calinout.jpg" width="200"/>
+</p>
+
 
 ## Getting Started
 
