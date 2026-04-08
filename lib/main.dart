@@ -43,8 +43,8 @@ void main() async {
           talker: talkerInstance,
           settings: const TalkerRiverpodLoggerSettings(
             printProviderAdded: false,
-            printProviderFailed: true, // This is the one you need!
-            printProviderUpdated: false, // Keep it false to reduce noise
+            printProviderFailed: true,
+            printProviderUpdated: false,
           ),
         ),
       ],

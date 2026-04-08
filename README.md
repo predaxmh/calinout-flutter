@@ -1,56 +1,146 @@
 # Calinout Flutter App
 
-A Calorie- and nutrition-tracking Flutter app focuses on tracking with an appealing design.
+A mobile calorie and nutrition tracking app built with Flutter,
+connected to a live ASP.NET Core API.
 
-# Features
-- Dashboard that calculates your calories and macros
-- A food type library page that allows the user to create a food type reference for the user's intakes
-- The user can create and manage food and meal(contains many foods) logs,
-- Weight page, the user manages their weight
-- A template page, the user can save meals and foods that they consistently consume and quickly add with a click
-- A profile page
-- The app focuses on tracking nutrients and calories only with a colorful design
+[Back-end Repo](https://github.com/predaxmh/calinout-api)
 
-## Architecture
-- The project has two main folders /core and /features
-- the core folder has all shared dependencies, modes, utils, and widgets:
-    /config => router(goRoute) - routes - app config(flutter_dotenv)
-    /database => hive config
-    /networking => Dio
-    /logger
-    ...
-    
-  - Features, separated into three layers:
-     data layer => (/source => api class, interface(), Dtos ) we handle the api request and return the DTO only)
-                   (/cache => hive models, cache class )
-                   (/repositories => repository that implements the interface from the domain)
-                  The repository depends on the interface in the source; we can change from api to another data source (local or Firebase)
-                  
-                  
-    domain layer => here we keep the app model clean and related to the app, and the repositories(interfaces) 
-- I use data layer for api calls and cache with an interface using
+[Live API / Swagger](https://api-calinout-isl-hfgnhvhqazfjfcfd.francecentral-01.azurewebsites.net/swagger/index.html)(For test only, give it 60 seconds to wake up on the first call)
 
 <p float="left">
-  <img src="screenshots/Screenshot_2026-04-05-14-55-27-587_com.example.calinout.jpg" width="200"/>
-  <img src="screenshots/Screenshot_2026-04-05-14-55-32-562_com.example.calinout.jpg" width="200"/>
-  <img src="screenshots/Screenshot_2026-04-05-14-55-37-344_com.example.calinout.jpg" width="200"/>
-  <img src="screenshots/Screenshot_2026-04-05-15-45-44-236_com.example.calinout.jpg" width="200"/>
-  <img src="screenshots/Screenshot_2026-04-05-15-45-47-705_com.example.calinout.jpg" width="200"/>
-  <img src="screenshots/Screenshot_2026-04-05-15-45-54-307_com.example.calinout.jpg" width="200"/>
-  <img src="screenshots/Screenshot_2026-04-05-15-46-03-650_com.example.calinout.jpg" width="200"/>
-  <img src="screenshots/Screenshot_2026-04-05-15-46-12-017_com.example.calinout.jpg" width="200"/>
+
+  <img src="screenshots/login.jpg" width="200"/>
+  <img src="screenshots/register.jpg" width="200"/>
+  <img src="screenshots/dashboard.jpg" width="200"/>
+  <img src="screenshots/food_types.jpg" width="200"/>
+  <img src="screenshots/food_log.jpg" width="200"/>
+  <img src="screenshots/templates.jpg" width="200"/>
+  <img src="screenshots/weight.jpg" width="200"/>
 </p>
 
+# Features
+
+- JWT authentication with automatic token refresh via Dio interceptor —
+  the user is never interrupted when the access token expires
+- Secure token storage using Flutter Secure Storage
+- Route protection with GoRouter — unauthenticated users are
+  redirected to login automatically
+- State management with Riverpod — loading, error, and data states
+  handled consistently across all screens
+- Paginated responses for food history
+- Layered architecture — swapping the API client requires
+  changing only the data layer
+- Structured logging with Talker
+- Responsive layout — adapts to different screen sizes
+
+## Architecture
+
+- The project has two main folders **/core** and **/features**
+  **Core** holds everything shared across features:
+- `/config` — GoRouter setup, routes, and AppConfig (flutter_dotenv)
+- `/networking` — Dio client and interceptors
+- `/database` — Hive configuration for local storage
+- `/logger` — Talker configuration
+- Shared widgets, models, and utilities
+
+- **Features**: separated into three layers:
+
+**Data Layer**
+
+- API service (Dio calls)
+- Data source interface
+- Repository implementation
+- DTOs
+
+**Domain Layer**
+
+- Business entities
+- Repository interfaces
+
+**Presentation Layer**
+
+- Riverpod controllers (state)
+- Pages (UI)
+
+**Operations flow :**
+ASP.NET API
+↕ JSON / HTTP
+API Service (Data Layer)
+↕ DTO
+Repository Implementation
+↕ Result<T> / Entity
+Riverpod Controller
+↕ State / Entity
+Page (UI)
+
+**Authentication flow:**
+
+**Login/Register**:
+
+→ Success: access token + refresh token
+stored in Flutter Secure Storage
+→ GoRouter redirects to Home
+
+→ Failure: error state
+→ GoRouter stays on Login
+
+- When the access token expires, the **Dio interceptor** automatically
+  uses the refresh token to get a new one — no manual re-login required.
+
+## Tech Stack
+
+- Framework | Flutter 3 |
+- State Management | Riverpod |
+- HTTP Client | Dio |
+- Testing | Flutter Test (unit) |
+- Routing | GoRoute|
+- Logger | Talker|
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+### Prerequisites
 
-A few resources to get you started if this is your first Flutter project:
+- Flutter 3 SDK
+- A running instance of the
+  [Calinout API](https://github.com/predaxmh/calinout-api)
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+### Setup
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+**1. Clone the repository:**
+
+```bash
+git clone https://github.com/predaxmh/calinout-flutter.git
+cd calinout-flutter
+flutter pub get
+```
+
+**2. Create a `.env` file at the project root:**
+
+**Note**: you need to run the asp.net api(link above),and copy local **.env**, or use the cloud .env code.(cloud is for limited time)
+
+**Cloud**
+
+```
+API_BASE_URL=https://api-calinout-isl-hfgnhvhqazfjfcfd.francecentral-01.azurewebsites.net
+APP_ENV=dev
+ENABLE_LOGGING=true
+```
+
+**local(running the back-end Api)**
+
+```
+API_BASE_URL=https://10.0.2.2:7026
+APP_ENV=dev
+ENABLE_LOGGING=true
+```
+
+## Known Limitations & Reflections
+
+- This app is a functional MVP but isn't production-ready yet.
+- I haven't done a full widget performance yet (const constructors, unnecessary rebuilds, local font bundling) My goal was to demonstrate the core architecture and data flow
+
+- I used AI to assist with specific UI components, such as the Weight Screen. While AI helped with the initial layout, I manually reviewed and integrated the code to ensure I fully understand the implementation.
+
+- I chose not to spend time configuring the test environment for
+  integration and widget tests — the patterns are the same and
+  I understand them, but it wasn't worth the time for a portfolio project.
