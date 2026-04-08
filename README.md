@@ -112,6 +112,13 @@ stored in Flutter Secure Storage
 git clone https://github.com/predaxmh/calinout-flutter.git
 cd calinout-flutter
 flutter pub get
+
+```
+
+**Important:** don't forget to generate files run:
+
+```
+dart run build_runner build --delete-conflicting-outputs>
 ```
 
 **2. Create a `.env` file at the project root:**
